@@ -14,6 +14,7 @@ import * as yup from "yup";
 
 import { toast } from "react-toastify";
 import { useProductCreateMutation } from "@/cusToomHooks/query/cms.query.hooks";
+import Swal from "sweetalert2";
 
 // Schema
 const schema = yup.object().shape({
@@ -25,8 +26,8 @@ const schema = yup.object().shape({
 
 export default function Create() {
 
-  const {mutate, isPending} = useProductCreateMutation();
-
+  const {mutate, isPending,status} = useProductCreateMutation();
+console.log(status,'status')
   const {
     register,
     handleSubmit,
@@ -50,6 +51,17 @@ export default function Create() {
       category: data.category,
     };
    mutate(formData);
+   if(status === 'success'){
+    Swal.fire('Product added succesfully',status);
+   }  mutate(formData, {
+    onSuccess: () => {
+      reset();
+      Swal.fire("Product added successfully!", "", "success");
+    },
+    onError: (error) => {
+      toast.error("Something went wrong!");
+    },
+  });
   };
 
   return (
@@ -149,7 +161,19 @@ export default function Create() {
             </Button>
           </Box>
           <Typography variant="body2" align="center" mt={2}>
-           
+           <Button
+           type="button"
+           href="/cms/list"
+            sx={{
+                mt: 3,
+                backgroundColor: "#e8e048ff",
+                color: "white",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: "#eaf0aeff",
+                },
+              }}
+              disabled={isSubmitting}>Go to List</Button>
           </Typography>
         </CardContent>
       </Card>

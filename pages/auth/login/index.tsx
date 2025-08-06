@@ -20,6 +20,7 @@ import {
 import { styled } from "@mui/material/styles";
 import MuiCard from "@mui/material/Card";
 import { useUserSignInMutation } from "@/cusToomHooks/query/auth.query.hooks";
+import { loginProps } from "@/typescript/auth.interface";
 
 // Your custom mutation hook
 
@@ -70,7 +71,7 @@ export default function Login() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as Resolver<loginProps>,
   });
 
   const { mutate, isPending } = useUserSignInMutation();
@@ -186,7 +187,7 @@ export default function Login() {
           <Box sx={{ textAlign: "center", mt: 2 }}>
             <Typography variant="body2">
               Don&apos;t have an account?{" "}
-              <Link href="register" underline="hover">
+              <Link href="/auth/register" underline="hover">
                 Sign up
               </Link>
             </Typography>

@@ -17,11 +17,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { Link as RouterLink } from "react-router-dom";
-
+import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
 import Link from "next/link";
-import { listQuery, useDeleteProduct } from "@/cusToomHooks/query/cms.query.hooks";
+import {
+  listQuery,
+  useDeleteProduct,
+} from "@/cusToomHooks/query/cms.query.hooks";
+import PrimarySearchAppBar from "./searchBar";
 // import Link from "next/link";
 
 export default function List() {
@@ -29,8 +33,10 @@ export default function List() {
   const [productToDelete, setProductToDelete] = React.useState<string | null>(
     null
   );
+  const [cookies, setCookie, removeCookie] = useCookies(["token", "id"]);
 
-  const { data, isError, refetch } = listQuery(); // ✅ Ensure refetch is extracted
+  const [searchedData, setSearchedData] = React.useState("");
+  const { data, isError, refetch } = listQuery();
   const { mutate: deleteMutation } = useDeleteProduct();
 
   const handleDelete = (id: string) => {
@@ -49,6 +55,10 @@ export default function List() {
       });
     }
   };
+// React.useEffect(()=>{
+//   window.location.reload();
+// },[cookies.token])
+  // console.log(searchedData,'searchedData')
 
   const columns = [
     { field: "index", headerName: "Sl. No.", width: 80 },
@@ -57,7 +67,7 @@ export default function List() {
       field: "price",
       headerName: "Price",
       width: 120,
-      valueFormatter: (params: any) => `₹${params.value}`,
+      valueFormatter: (params: any) => `₹${params}`,
     },
     { field: "description", headerName: "Description", width: 250 },
     { field: "category", headerName: "Category", width: 140 },
@@ -94,15 +104,23 @@ export default function List() {
 
   const paginationModel = { page: 0, pageSize: 5 };
 
-  const rows =
-    data?.data.product?.map((item, index) => ({
+  const rows = (data?.data.product || [])
+    .filter((item) =>
+      [item.name, item.category, item.description].some((field) =>
+        field?.toLowerCase().includes(searchedData.toLowerCase())
+      )
+    )
+    .map((item, index) => ({
       id: item._id,
       index: index + 1,
       ...item,
-    })) || [];
+    }));
 
   return (
     <>
+      {/* Search bar start */}
+      <PrimarySearchAppBar onSearch={setSearchedData} />
+      {/* Search bar end */}
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Paper elevation={3} sx={{ p: 3, borderRadius: 3, background: "grey" }}>
           <Box
@@ -114,7 +132,13 @@ export default function List() {
             <Typography variant="h5" fontWeight={600}>
               Product List
             </Typography>
-            <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+
+            <Button
+              variant="contained"
+              color="primary"
+              href="/cms/create"
+              startIcon={<AddIcon />}
+            >
               Add Product
             </Button>
           </Box>
