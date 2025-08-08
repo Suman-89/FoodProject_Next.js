@@ -115,6 +115,7 @@ export default function Login() {
             Swal.fire("Success", message || "Login successful", "success").then(
               () => {
                 router.push("/cms/list");
+                // window.location.reload();
               }
             );
           } else {

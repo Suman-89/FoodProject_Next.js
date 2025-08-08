@@ -16,9 +16,11 @@ import { DataGrid } from "../../../node_modules/@mui/x-data-grid/esm/DataGrid/Da
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link as RouterLink } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { useCart } from "../../../context/cartContext";
 
 import Link from "next/link";
 import {
@@ -39,6 +41,8 @@ export default function List() {
   const { data, isError, refetch } = listQuery();
   const { mutate: deleteMutation } = useDeleteProduct();
 
+  const { addToCart } = useCart();
+
   const handleDelete = (id: string) => {
     setProductToDelete(id);
     setOpenDeleteModal(true);
@@ -55,9 +59,9 @@ export default function List() {
       });
     }
   };
-// React.useEffect(()=>{
-//   window.location.reload();
-// },[cookies.token])
+  // React.useEffect(()=>{
+  //   window.location.reload();
+  // },[cookies.token])
   // console.log(searchedData,'searchedData')
 
   const columns = [
@@ -74,9 +78,27 @@ export default function List() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 200,
+      width: 400,
       renderCell: (params) => (
         <Stack direction="row" spacing={1}>
+          <Button
+            variant="outlined"
+            color="success"
+            size="small"
+            startIcon={<ShoppingCartIcon />}
+            onClick={() => {
+              addToCart({
+                id: params.row._id,
+                name: params.row.name,
+                price: params.row.price,
+                quantity: 1,
+              });
+              toast.success("Item added to cart!");
+            }}
+          >
+            Add to cart
+          </Button>
+
           <Button
             variant="outlined"
             color="info"

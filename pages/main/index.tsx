@@ -65,7 +65,7 @@ const settings = {
   slidesToShow: 1,
   slidesToScroll: 1,
   arrows: true,
-  autoplay: true,           // ✅ Enable autoplay
+  autoplay: true,  
   autoplaySpeed: 3000,  
 };
 
@@ -193,7 +193,7 @@ const HomePage: React.FC = () => {
         }}
       >
         <Typography variant="h4" gutterBottom sx={{ fontFamily: "Pacifico" }}>
-          Top Recipes of the Day
+          Top Recipes of the day
         </Typography>
         <Grid item xs={12} md={3}>
           <Box sx={{ maxWidth: 800, margin: "0 auto 0", height: 600 }}>

@@ -1,27 +1,33 @@
-// components/Navbar.js
+// components/Header.tsx
 import React, { useEffect, useState } from "react";
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { toast } from "react-toastify";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  Container,
+  Grid,
+  Badge,
+} from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useRouter } from "next/router";
-// import { Cookies } from "react-cookie";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
-import { Box, Container, Grid, useTheme } from "@mui/material";
-import LoginIcon from "@mui/icons-material/Login";
+import { useCart } from "../../../context/cartContext";
 
-export default function Header() {
+const Header: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(["token", "id"]);
+  const [cookies, , removeCookie] = useCookies(["token", "id"]);
+  const { cartItems } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
-    if (cookies.token) {
-
     setIsClient(true);
-    }
   }, []);
 
-  const router = useRouter();
-  const handleClick = async () => {
+  const handleLogout = async () => {
     const result = await Swal.fire({
       title: "Confirm Logout?",
       icon: "warning",
@@ -36,15 +42,15 @@ export default function Header() {
       removeCookie("id", { path: "/auth" });
       setTimeout(() => {
         router.push("/main");
-        // window.location.reload();
       }, 800);
     }
   };
 
-  // if (!isClient || !cookies.token) return null;
+  const cartCount = cartItems.length;
 
   return (
     <>
+      {/* Logo & Header Section */}
       <Box
         sx={{
           width: "100%",
@@ -58,62 +64,37 @@ export default function Header() {
             alignItems="center"
             justifyContent="space-between"
             sx={{
-              //  position: 'relative',
-              display: "flex",
-              // justifyContent: 'flex-end',
-              alignItems: "center",
-              backgroundImage: `url('/assets/food/header_image.png')`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "contain",
-              // backgroundPosition: 'right center',
               minHeight: "140px",
               px: 2,
-            }}       variant="outlined"
-           
+            }}
           >
-            {/* Logo & Subtitle */}
+            {/* Logo */}
             <Grid item xs={12} md={6}>
-              <Box sx={{ py: 3 }}>
-                <Typography
+              <Box sx={{ py: 3, display: "flex", alignItems: "center" }}>
+                <img
+                  src="/assets/food/logo1.png"
+                  alt="Food Recipes Logo"
+                  style={{ height: "60px", marginRight: "1rem" }}
+                />
+                {/* <Typography
                   variant="h4"
                   sx={{
                     fontFamily: "'Georgia', serif",
                     fontWeight: 600,
                     color: "#4A4A4A",
-                    display: "flex",
-                    alignItems: "center",
                   }}
                 >
-                  <Box
-                    component="span"
-                    sx={{
-                      color: "green",
-                      fontSize: "2rem",
-                      mr: 1,
-                      backgroundImage: `url('/assets/food/logo1.png')`,
-                      backgroundRepeat: "no-repeat",
-                    }}
-                  >
-                    <img src="/assets/food/logo1.png" alt="" />
-                  </Box>
-                  {/* Food Recipes */}
-                </Typography>
-                {/* <Typography
-                variant="subtitle1"
-                sx={{ fontFamily: "'Georgia', serif", color: '#777' }}
-              >
-                A Premium WordPress Theme
-              </Typography> */}
+                  Food Recipes
+                </Typography> */}
               </Box>
             </Grid>
 
-            {/* Right side - Background + Login Button */}
+            {/* Header Image & Auth Button */}
             <Grid
               item
               xs={12}
               md={6}
               sx={{
-                position: "relative",
                 display: "flex",
                 justifyContent: "flex-end",
                 alignItems: "center",
@@ -121,9 +102,17 @@ export default function Header() {
                 px: 2,
               }}
             >
-              {!isClient ? 
+              <img
+                src="/assets/food/header_image.png"
+                alt="Header Illustration"
+                style={{ height: "100px", marginRight: "1rem" }}
+              />
+
+              {isClient && !cookies.token ? (
                 <Button
                   startIcon={<LoginIcon />}
+                  href="/auth/login"
+                  variant="outlined"
                   sx={{
                     color: "green",
                     borderColor: "green",
@@ -132,47 +121,69 @@ export default function Header() {
                       color: "darkgreen",
                     },
                   }}
-                  href="/auth/login"
                 >
                   Login
                 </Button>
-              :
-                <Button
-                  startIcon={<LoginIcon />}
-                  sx={{
-                    color: "green",
-                    borderColor: "green",
-                    "&:hover": {
-                      borderColor: "darkgreen",
-                      color: "darkgreen",
-                    },
-                  }}
-                  href="/auth/login"
-                >
-                  Logout
-                </Button>
-              }
+              ) : (
+                isClient && (
+                  <Button
+                    startIcon={<LoginIcon />}
+                    onClick={handleLogout}
+                    variant="outlined"
+                    sx={{
+                      color: "green",
+                      borderColor: "green",
+                      "&:hover": {
+                        borderColor: "darkgreen",
+                        color: "darkgreen",
+                      },
+                    }}
+                  >
+                    Logout
+                  </Button>
+                )
+              )}
             </Grid>
           </Grid>
         </Container>
       </Box>
+
+      {/* Navigation Bar */}
       <AppBar position="static" color="primary">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography variant="h6">Product App</Typography>
-          <div>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Food Recipes
+          </Typography>
+
+          <Box display="flex" alignItems="center" gap={2}>
+            <Button color="inherit" href="/cms/list">
+              Products
+            </Button>
+
+            <Button
+              color="inherit"
+              href="/cms/cart"
+              startIcon={
+                <Badge
+                  badgeContent={cartCount > 0 ? 1 : 0}
+                  color="error"
+                  max={9}
+                >
+                  <ShoppingCartIcon />
+                </Badge>
+              }
+            >
+              My Cart
+            </Button>
+
             <Button color="inherit" href="/auth/profile">
               My Profile
             </Button>
-
-            <Button color="inherit" href="/cms/list">
-              CMS List
-            </Button>
-            <Button color="inherit" onClick={handleClick}>
-              Logout
-            </Button>
-          </div>
+          </Box>
         </Toolbar>
       </AppBar>
     </>
   );
-}
+};
+
+export default Header;
