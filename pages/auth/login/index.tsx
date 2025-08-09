@@ -65,6 +65,13 @@ const validationSchema = yup.object().shape({
     .required("Password is required"),
 });
 
+type response = {
+  token:string;
+  status:boolean;
+  message:string;
+  user:{ id: string };
+}
+
 export default function Login() {
   const {
     register,
@@ -98,7 +105,7 @@ export default function Login() {
 
     if (result.isConfirmed) {
       mutate(newData, {
-        onSuccess: (response) => {
+        onSuccess: (response : response) => {
           const { token, status, message, user } = response || {};
           console.log(response, "res");
           if (status === true) {
