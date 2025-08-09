@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import Swal from "sweetalert2";
+import React from "react";
 import {
   Avatar,
   Box,
@@ -10,7 +9,6 @@ import {
   Grid,
   Typography,
   Paper,
-  Chip,
 } from "@mui/material";
 
 export default function Profile() {

@@ -288,7 +288,7 @@ const HomePage: React.FC = () => {
         }}
       >
         <Typography variant="body2">
-          &copy; {new Date().getFullYear()} Food Recipes – A React + MUI Project
+          &copy; {new Date().getFullYear()} Food Recipes – A Next.js + MUI Project
         </Typography>
       </Box>
     </Box>

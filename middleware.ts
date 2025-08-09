@@ -15,5 +15,5 @@ export function middleware(request: any) {
 }
 
 export const config = {
-  matcher: ["/cms/list","/cms/update/:slug","/cms/create","/auth/profile"],
+  matcher: ["/cms/list","/cms/update/:slug","/cms/create","/auth/profile","/auth/update","/cms/cart"],
 };

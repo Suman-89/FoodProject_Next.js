@@ -6,19 +6,28 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
-  //   Link,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-// import { Link } from "react-router-dom";
+import { updatePasswordMutation } from "@/cusToomHooks/query/auth.query.hooks";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
-// import { useTokenStore } from "../../../zustand/store";
 
-const schema = yup.object().shape({
+type UpdatePasswordForm = {
+  password: string;
+};
+
+
+type UpdatePasswordPayload = {
+  user_id: string;
+  password: string;
+};
+
+// Validation schema
+const schema = yup.object({
   password: yup
     .string()
     .min(3, "Password must be at least 3 characters")
@@ -26,100 +35,96 @@ const schema = yup.object().shape({
 });
 
 export default function UpdatePassword() {
-// const [cookies] = useCookies(["id"])
-// const userId = localStorage.getItem('user_id');
-// const user_id = cookies.id;
-// console.log(user_id,'id');
+  const [showPassword, setShowPassword] = useState(false);
+  const [cookies] = useCookies(["token", "id"]);
+  const { mutate, isLoading } = updatePasswordMutation();
+
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors },
-  } = useForm({
+    formState: { errors },
+  } = useForm<UpdatePasswordForm>({
     resolver: yupResolver(schema),
   });
 
-  // const onSubmit = (data) => {
-  // //  dispatch(login(data))
-  // const newData = {
-  //   user_id : userId,
-  //   password : data.password
-  // }
-  // // console.log(data)
-  // };
+  const onSubmit = async (data: UpdatePasswordForm) => {
+    if (!cookies.id) {
+      toast.error("User ID not found. Please log in again.");
+      return;
+    }
+
+    const payload: UpdatePasswordPayload = {
+      user_id: cookies.id,
+      password: data.password,
+    };
+
+    try {
+      mutate(payload, {
+        onSuccess: () => {
+          toast.success("Password updated successfully!");
+          // router.push("/auth/success");
+        },
+        onError: (error: any) => {
+          toast.error(
+            error?.response?.data?.message || "Failed to update password"
+          );
+        },
+      });
+    } catch (error) {
+      console.error("Password update failed:", error);
+      toast.error("Unexpected error occurred.");
+    }
+  };
 
   return (
-    <>
-      <Container maxWidth="sm">
-        <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
-          <Typography variant="h4" gutterBottom>
-            Update password
-          </Typography>
-          <Typography variant="body1" textAlign="center" mb={2}>
-            Update your password.
-          </Typography>
-          <Box component="form" 
-          // onSubmit={handleSubmit(onSubmit)} 
-          width="100%">
-            <TextField
-              fullWidth
-              label="Password"
-              {...register("password")}
-              //   type={passwordType}
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              margin="normal"
-              variant="outlined"
-            />
+    <Container maxWidth="sm">
+      <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
+        <Typography variant="h4" gutterBottom>
+          Update Password
+        </Typography>
+        <Typography variant="body1" textAlign="center" mb={2}>
+          Enter your new password below.
+        </Typography>
 
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mt={1}
-            >
-              <FormControlLabel
-                control={
-                  <Checkbox
-                  //   onClick={() =>
-                  //     setPasswordType((prev) =>
-                  //       prev === "password" ? "text" : "password"
-                  //     )
-                  //   }
-                  />
-                }
-                label="Show Password"
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          width="100%"
+          noValidate
+        >
+          <TextField
+            fullWidth
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            {...register("password")}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            margin="normal"
+            variant="outlined"
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showPassword}
+                onChange={() => setShowPassword((prev) => !prev)}
               />
-              <Typography variant="body2">
-                {/* <Link to="/auth/register">Go to register</Link> */}
-              </Typography>
-            </Box>
+            }
+            label="Show Password"
+          />
 
-            {isSubmitting ? (
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{ mt: 2 }}
-                disabled={isSubmitting}
-              >
-                Loading...
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{ mt: 2 }}
-                disabled={isSubmitting}
-              >
-                Update password
-              </Button>
-            )}
-          </Box>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Update Password"}
+          </Button>
         </Box>
-      </Container>
-    </>
+      </Box>
+    </Container>
   );
 }

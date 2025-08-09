@@ -41,7 +41,7 @@ export const GetLandingPageList = async () => {
 export const deleteProduct = async (id: string) => {
   try {
     const response = await AxiosInstance.delete(
-      `${endpoints.cms.deleteItem}/${id}`
+      `${endpoints.cms.deleteItem(id)}`
     );
     console.log("Product deleted:", response.data.message);
     toast.success(response.data.message);

@@ -4,7 +4,12 @@ import { endpoints } from "../endpoints/endpoints";
 import { Axios } from "axios";
 import { array } from "yup";
 import { MutationFunction } from "@tanstack/react-query";
-import { loginProps, registerProps, verifyProps } from "@/typescript/auth.interface";
+import {
+  loginProps,
+  registerProps,
+  updatePasswordProps,
+  verifyProps,
+} from "@/typescript/auth.interface";
 
 interface UpdateResponse {
   success: boolean;
@@ -14,20 +19,36 @@ interface UpdateResponse {
 }
 
 //Registration
-export const Reg: MutationFunction<registerProps,unknown> = async (userPayLoad) => {
+export const Reg: MutationFunction<registerProps, unknown> = async (
+  userPayLoad
+) => {
   const res = await AxiosInstance.post(endpoints.auth.signup, userPayLoad);
   return res.data;
 };
 
 //Verify
-export const Otp:MutationFunction<verifyProps, unknown> = async (userPayLoad) => {
+export const Otp: MutationFunction<verifyProps, unknown> = async (
+  userPayLoad
+) => {
   const res = await AxiosInstance.post(endpoints.auth.otp, userPayLoad);
   return res.data;
 };
 
 //Login
-export const Login:MutationFunction<loginProps, unknown> = async (userPayLoad) => {
+export const Login: MutationFunction<loginProps, unknown> = async (
+  userPayLoad
+) => {
   const res = await AxiosInstance.post(endpoints.auth.signin, userPayLoad);
   return res.data;
 };
 
+//Password Update
+export const PasswordUpdate: MutationFunction<updatePasswordProps, unknown> = async (
+  userPayLoad
+) => {
+  const res = await AxiosInstance.post(
+    endpoints.auth.updatepassword,
+    userPayLoad
+  );
+  return res.data;
+};

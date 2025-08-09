@@ -9,7 +9,6 @@ import {
   InputAdornment,
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import image1 from "../../../public/assets/image1.png";
@@ -19,7 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { registerProps } from "@/typescript/auth.interface";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -35,34 +34,40 @@ const schema = yup.object().shape({
 
 const Register: React.FC = () => {
   const router = useRouter();
-  const { mutate, isPending } = useUserSignUpMutation();
+  const { mutate } = useUserSignUpMutation();
 
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { errors },
   } = useForm<registerProps>({
     resolver: yupResolver(schema) as Resolver<registerProps>,
   });
 
-  const onSubmit = (fData:any) => {
-    const {name, email, password} = fData as {
-      name: String, email: String, password: String
-    }
-    const data = {
-      name: fData.name,
-      email: fData.email,
-      password: fData.password,
-    };
-    // let formData = new FormData();
-    console.log(data)
-    // formData.append("email", formData.email);
-    // formData.append("name", formData.name);
-    // formData.append("password", formData.password);
-    mutate(data);
-    router.push('/auth/verify');
-    localStorage.setItem("email",data.email);
-  };
+type FormDataType = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+const onSubmit = (formData: FormDataType) => {
+  const { name, email, password } = formData;
+
+  // Prepare payload
+  const payload: FormDataType = { name, email, password };
+
+  console.log(payload);
+
+  // API mutation
+  mutate(payload);
+
+  // Save email locally before redirect
+  localStorage.setItem("email", email);
+
+  // Navigate to verify page
+  router.push("/auth/verify");
+};
+
 //userouter hooks
   return (
     <Box

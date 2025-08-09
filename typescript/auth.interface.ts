@@ -21,15 +21,23 @@ export interface IloginProps {
 export interface IverifyProps {
   otp: string;
 }
+export interface IupdatePasswordProps {
+  password: string;
+  _id: string;
+}
 
 export interface registerProps extends IregisterProps {
-    user: IregisterProps;
+  user: IregisterProps;
 }
 
 export interface loginProps extends IloginProps {
-    user: IloginProps;
+  user: IloginProps;
 }
 
 export interface verifyProps extends IverifyProps {
   user: IverifyProps;
+}
+
+export interface updatePasswordProps extends IupdatePasswordProps {
+  user: IupdatePasswordProps;
 }

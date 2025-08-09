@@ -1,4 +1,3 @@
-// components/Header.tsx
 import React, { useEffect, useState } from "react";
 import {
   AppBar,
@@ -9,6 +8,10 @@ import {
   Container,
   Grid,
   Badge,
+  Avatar,
+  Menu,
+  MenuItem,
+  IconButton,
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -16,6 +19,7 @@ import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { useCart } from "../../../context/cartContext";
+import { deepOrange } from "@mui/material/colors";
 
 const Header: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
@@ -23,11 +27,24 @@ const Header: React.FC = () => {
   const { cartItems } = useCart();
   const router = useRouter();
 
+  // Avatar menu state
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   const handleLogout = async () => {
+    handleMenuClose(); // close menu first
     const result = await Swal.fire({
       title: "Confirm Logout?",
       icon: "warning",
@@ -76,16 +93,6 @@ const Header: React.FC = () => {
                   alt="Food Recipes Logo"
                   style={{ height: "60px", marginRight: "1rem" }}
                 />
-                {/* <Typography
-                  variant="h4"
-                  sx={{
-                    fontFamily: "'Georgia', serif",
-                    fontWeight: 600,
-                    color: "#4A4A4A",
-                  }}
-                >
-                  Food Recipes
-                </Typography> */}
               </Box>
             </Grid>
 
@@ -126,21 +133,43 @@ const Header: React.FC = () => {
                 </Button>
               ) : (
                 isClient && (
-                  <Button
-                    startIcon={<LoginIcon />}
-                    onClick={handleLogout}
-                    variant="outlined"
-                    sx={{
-                      color: "green",
-                      borderColor: "green",
-                      "&:hover": {
-                        borderColor: "darkgreen",
-                        color: "darkgreen",
-                      },
-                    }}
-                  >
-                    Logout
-                  </Button>
+                  <>
+                    <IconButton onClick={handleAvatarClick} sx={{ p: 0 }}>
+                    <Avatar sx={{ bgcolor: deepOrange[500] }}>U</Avatar>
+                    </IconButton>
+
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleMenuClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          router.push("/auth/profile");
+                        }}
+                      >
+                        My Profile
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          router.push("/auth/update");
+                        }}
+                      >
+                        Update Password
+                      </MenuItem>
+                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </Menu>
+                  </>
                 )
               )}
             </Grid>
@@ -152,7 +181,7 @@ const Header: React.FC = () => {
       <AppBar position="static" color="primary">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            Food Recipes
+            
           </Typography>
 
           <Box display="flex" alignItems="center" gap={2}>
@@ -164,20 +193,12 @@ const Header: React.FC = () => {
               color="inherit"
               href="/cms/cart"
               startIcon={
-                <Badge
-                  badgeContent={cartCount > 0 ? 1 : 0}
-                  color="error"
-                  max={9}
-                >
+                <Badge badgeContent={cartCount} color="error" max={9}>
                   <ShoppingCartIcon />
                 </Badge>
               }
             >
               My Cart
-            </Button>
-
-            <Button color="inherit" href="/auth/profile">
-              My Profile
             </Button>
           </Box>
         </Toolbar>

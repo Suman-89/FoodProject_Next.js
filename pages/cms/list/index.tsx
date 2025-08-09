@@ -52,7 +52,7 @@ export default function List() {
     if (productToDelete) {
       deleteMutation(productToDelete, {
         onSuccess: () => {
-          toast.success("Product deleted successfully");
+          // toast.success("Product deleted successfully");
           setOpenDeleteModal(false);
           refetch();
         },
@@ -79,7 +79,7 @@ export default function List() {
       field: "actions",
       headerName: "Actions",
       width: 400,
-      renderCell: (params) => (
+      renderCell: (params:any) => (
         <Stack direction="row" spacing={1}>
           <Button
             variant="outlined"

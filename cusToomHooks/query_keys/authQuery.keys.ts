@@ -5,3 +5,4 @@ export const PRODUCTS = "PRODUCTS";
 export const REMOVE = "REMOVE";
 export const VERIFY = "VERIFY";
 export const UPDATE = "UPDATE";
+export const PASSWORD = "PASSWORD";

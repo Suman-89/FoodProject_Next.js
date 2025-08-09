@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Swal from "sweetalert2";
-import { Cookies, useCookies } from "react-cookie";
+import { Cookies } from "react-cookie";
 import { useRouter } from "next/router";
 
 // MUI imports
@@ -79,15 +79,14 @@ export default function Login() {
   const router = useRouter();
 
   const onSubmit = async (data: { email: string; password: string }) => {
-    const { email, password } = data as {
-      email: String;
-      password: String;
-    };
+    // const { email, password } = data as {
+    //   email: String;
+    //   password: String;
+    // };
     const newData = {
       email: data.email,
       password: data.password,
     };
-    // console.log(newData,'data');
     const result = await Swal.fire({
       title: "Confirm Login?",
       icon: "warning",
@@ -185,8 +184,13 @@ export default function Login() {
 
           <Divider>or</Divider>
 
-          <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Typography variant="body2">
+          <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', }}>
+            {/* <Typography variant="body2">
+              <Link href="/auth/update" underline="hover">
+                Forgot password ?
+              </Link>
+            </Typography> */}
+             <Typography variant="body2">
               Don&apos;t have an account?{" "}
               <Link href="/auth/register" underline="hover">
                 Sign up

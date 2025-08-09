@@ -1,8 +1,8 @@
-import { useMutation, UseMutationResult, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Create, deleteProduct, GetLandingPageList, getSignleProduct, Login, Otp, Reg, Remove, updateProduct } from "@/api/function/auth.api";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { Login, Otp, PasswordUpdate, Reg } from "@/api/function/auth.api";
 import { useGlobalHooks } from "./globalHooks";
-import { CREATE, SIGNIN, SIGNUP, PRODUCTS, REMOVE, VERIFY, UPDATE } from "../query_keys/authQuery.keys";
-import { Cookies, useCookies } from "react-cookie";
+import { SIGNIN, SIGNUP, VERIFY, PASSWORD } from "../query_keys/authQuery.keys";
+import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 
 // Register
@@ -46,6 +46,24 @@ export const useUserSignInMutation = ():UseMutationResult<unknown> => {
 //Update Password
 export const updatePasswordMutation = () =>{
   const {queryClient} = useGlobalHooks();
+  
+    return useMutation({
+      mutationFn: PasswordUpdate,
+  
+      onSuccess: (res) => {
+        console.log("Update success:", res);
+        const { message } = res || {};
+  
+        toast.success(`${message || "Password updated successfully"}`);
+        queryClient.invalidateQueries({ queryKey: [PASSWORD] });
+      },
+  
+      onError: (error: any) => {
+        toast.error(`${error?.response?.data?.msg || error?.message || "Update failed"}`);
+        console.error("Update error:", error);
+        queryClient.invalidateQueries({ queryKey: [PASSWORD] });
+      },
+    });
 }
 
 

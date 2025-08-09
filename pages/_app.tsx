@@ -9,6 +9,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { CartProvider } from "../context/cartContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
@@ -21,6 +23,17 @@ export default function App({ Component, pageProps }: AppProps) {
               <Wrapper>
                 <CssBaseline />
                 <Component {...pageProps} />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={2000}
+                  hideProgressBar
+                  newestOnTop
+                  closeOnClick
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="colored"
+                />
               </Wrapper>
             </CartProvider>
           </ThemeProvider>
