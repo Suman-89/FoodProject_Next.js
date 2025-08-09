@@ -149,7 +149,7 @@ const HomePage: React.FC = () => {
           Search Recipes
         </Typography>
         <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={5} {...({} as any)}>
             <TextField
               fullWidth
               label="Search..."
@@ -157,7 +157,7 @@ const HomePage: React.FC = () => {
               onChange={(e) => setSearchText(e.target.value)}
             />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={4} {...({} as any)}>
             <FormControl fullWidth>
               <InputLabel>Category</InputLabel>
               <Select
@@ -174,7 +174,7 @@ const HomePage: React.FC = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={3} {...({} as any)}>
             <Button fullWidth variant="contained" onClick={handleSearch}>
               Search
             </Button>
@@ -195,7 +195,7 @@ const HomePage: React.FC = () => {
         <Typography variant="h4" gutterBottom sx={{ fontFamily: "Pacifico" }}>
           Top Recipes of the day
         </Typography>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={3} {...({} as any)}>
           <Box sx={{ maxWidth: 800, margin: "0 auto 0", height: 600 }}>
             <Slider {...settings}>
               {mockTopRecipes.map((item, i) => (
@@ -234,7 +234,7 @@ const HomePage: React.FC = () => {
         </Typography>
         <Grid container spacing={2}>
           {hotList.map((item, i) => (
-            <Grid item xs={12} md={6} key={item.id}>
+            <Grid item xs={12} md={6} key={item.id} {...({} as any)}>
               <Card>
                 <CardMedia
                   component="img"

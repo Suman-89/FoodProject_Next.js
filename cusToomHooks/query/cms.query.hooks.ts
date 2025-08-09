@@ -1,9 +1,9 @@
 import { Cookies, useCookies } from "react-cookie";
 import { useGlobalHooks } from "./globalHooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CREATE, PRODUCTS, REMOVE } from "../query_keys/authQuery.keys";
 import { toast } from "react-toastify";
 import { Create, deleteProduct, GetLandingPageList, getSignleProduct, updateProduct } from "@/api/function/cms.api";
+import { CREATE, PRODUCTS, REMOVE, UPDATE } from "../query_keys/cmsQuery.keys";
 
 
 
@@ -61,13 +61,13 @@ export const useUpdateItem = () => {
       const { message } = res || {};
 
       toast.success(`${message || "Product updated successfully"}`);
-      queryClient.invalidateQueries({ queryKey: ["UPDATE"] });
+      queryClient.invalidateQueries({ queryKey: [UPDATE] });
     },
 
     onError: (error: any) => {
       toast.error(`${error?.response?.data?.msg || error?.message || "Update failed"}`);
       console.error("Update error:", error);
-      queryClient.invalidateQueries({ queryKey: ["UPDATE"] });
+      queryClient.invalidateQueries({ queryKey: [UPDATE] });
     },
   });
 };

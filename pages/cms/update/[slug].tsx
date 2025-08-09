@@ -70,7 +70,7 @@ console.log(data,'data')
   useEffect(() => {
     if (isSuccess) {
       queryClient.invalidateQueries({ queryKey: ["singleItem"] });
-      router.push("/products");
+      router.push("/cms/list");
     }
   }, [isSuccess, queryClient, router]);
 

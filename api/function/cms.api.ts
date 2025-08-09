@@ -66,17 +66,8 @@ export const getSignleProduct = async (id: string) => {
     throw error;
   }
 };
-//Update
-// export const updateProduct = async (payload,id) =>{
-//    try {
-//     const response = await AxiosInstance.put(`${endpoints.cms.proupdate}/${id}`, payload);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error update password:", error);
-//     throw error;
-//   }
-// };
 
+// Update Product
 export const updateProduct = async (
   payload: any,
   id: string

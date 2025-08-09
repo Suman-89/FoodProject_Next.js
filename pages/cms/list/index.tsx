@@ -107,6 +107,7 @@ export default function List() {
             component={Link}
             href={`/cms/update/${params.row._id}`}
             underline="none"
+            {...({} as any)}
           >
             Edit
           </Button>
@@ -127,12 +128,12 @@ export default function List() {
   const paginationModel = { page: 0, pageSize: 5 };
 
   const rows = (data?.data.product || [])
-    .filter((item) =>
+    .filter((item:any) =>
       [item.name, item.category, item.description].some((field) =>
         field?.toLowerCase().includes(searchedData.toLowerCase())
       )
     )
-    .map((item, index) => ({
+    .map((item:any, index:number) => ({
       id: item._id,
       index: index + 1,
       ...item,

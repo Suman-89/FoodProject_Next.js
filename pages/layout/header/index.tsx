@@ -6,13 +6,14 @@ import {
   Button,
   Box,
   Container,
-  Grid,
   Badge,
   Avatar,
   Menu,
   MenuItem,
   IconButton,
 } from "@mui/material";
+import Grid from "@mui/material/Grid";
+
 import LoginIcon from "@mui/icons-material/Login";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useRouter } from "next/router";
@@ -86,14 +87,16 @@ const Header: React.FC = () => {
             }}
           >
             {/* Logo */}
-            <Grid item xs={12} md={6}>
-              <Box sx={{ py: 3, display: "flex", alignItems: "center" }}>
-                <img
-                  src="/assets/food/logo1.png"
-                  alt="Food Recipes Logo"
-                  style={{ height: "60px", marginRight: "1rem" }}
-                />
-              </Box>
+            <Grid container>
+              <Grid item xs={12} md={6} {...({} as any)}>
+                <Box sx={{ py: 3, display: "flex", alignItems: "center" }}>
+                  <img
+                    src="/assets/food/logo1.png"
+                    alt="Food Recipes Logo"
+                    style={{ height: "60px", marginRight: "1rem" }}
+                  />
+                </Box>
+              </Grid>
             </Grid>
 
             {/* Header Image & Auth Button */}
@@ -108,6 +111,7 @@ const Header: React.FC = () => {
                 minHeight: "140px",
                 px: 2,
               }}
+              {...({} as any)}
             >
               <img
                 src="/assets/food/header_image.png"
@@ -135,7 +139,7 @@ const Header: React.FC = () => {
                 isClient && (
                   <>
                     <IconButton onClick={handleAvatarClick} sx={{ p: 0 }}>
-                    <Avatar sx={{ bgcolor: deepOrange[500] }}>U</Avatar>
+                      <Avatar sx={{ bgcolor: deepOrange[500] }}>U</Avatar>
                     </IconButton>
 
                     <Menu
@@ -180,9 +184,7 @@ const Header: React.FC = () => {
       {/* Navigation Bar */}
       <AppBar position="static" color="primary">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            
-          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}></Typography>
 
           <Box display="flex" alignItems="center" gap={2}>
             <Button color="inherit" href="/cms/list">

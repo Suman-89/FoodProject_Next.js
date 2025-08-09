@@ -24,6 +24,7 @@ export interface IverifyProps {
 export interface IupdatePasswordProps {
   password: string;
   _id: string;
+  message:string;
 }
 
 export interface registerProps extends IregisterProps {
