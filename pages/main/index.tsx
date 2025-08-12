@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  AppBar,
   Box,
   Button,
   Card,
@@ -8,17 +7,12 @@ import {
   CardMedia,
   Container,
   Grid,
-  IconButton,
-  Menu,
-  MenuItem,
   TextField,
-  Toolbar,
   Typography,
   Select,
   InputLabel,
   FormControl,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import Slider from "react-slick";
 
 type Recipe = {
@@ -198,7 +192,7 @@ const HomePage: React.FC = () => {
         <Grid item xs={12} md={3} {...({} as any)}>
           <Box sx={{ maxWidth: 800, margin: "0 auto 0", height: 600 }}>
             <Slider {...settings}>
-              {mockTopRecipes.map((item, i) => (
+              {mockTopRecipes.map((item) => (
                 <Card
                   key={item.id}
                   sx={{

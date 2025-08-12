@@ -78,8 +78,11 @@ export default function Login() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: yupResolver(validationSchema) as Resolver<loginProps>,
+    // resolver: yupResolver(validationSchema) as Resolver<loginProps>,
+    resolver: yupResolver(validationSchema),
+
   });
+// type loginProps = yup.InferType<typeof validationSchema>;
 
   const { mutate, isPending } = useUserSignInMutation();
   const cookie = new Cookies();

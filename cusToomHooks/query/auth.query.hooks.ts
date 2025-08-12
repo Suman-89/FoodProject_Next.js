@@ -4,6 +4,7 @@ import { useGlobalHooks } from "./globalHooks";
 import { SIGNIN, SIGNUP, VERIFY, PASSWORD } from "../query_keys/authQuery.keys";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
+import { loginProps } from "@/typescript/auth.interface";
 
 // Register
 export const useUserSignUpMutation = (): UseMutationResult<unknown> => {
@@ -30,19 +31,24 @@ export const useUserVerifyMutation = ():UseMutationResult<unknown> => {
 };
 
 //Sign in
-export const useUserSignInMutation = ():UseMutationResult<unknown> => {
+
+export const useUserSignInMutation = (): UseMutationResult<
+  Response,       // ✅ response from server
+  Error,          // ✅ error type (can be customized)
+  loginProps      // ✅ variables passed to mutate
+> => {
   const { queryClient } = useGlobalHooks();
 
-  const [_, setCookie] = useCookies(["token","id"]);
-  // localStorage.setItem("user_id",id);
+  const [_, setCookie] = useCookies(["token", "id"]);
 
-  return useMutation({
+  return useMutation<response, Error, loginProps>({
     mutationFn: Login,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SIGNIN] });
     },
   });
 };
+
 //Update Password
 export const updatePasswordMutation = () =>{
   const {queryClient} = useGlobalHooks();

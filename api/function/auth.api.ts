@@ -1,8 +1,5 @@
-import { toast } from "react-toastify";
 import AxiosInstance from "../axios/axios";
 import { endpoints } from "../endpoints/endpoints";
-import { Axios } from "axios";
-import { array } from "yup";
 import { MutationFunction } from "@tanstack/react-query";
 import {
   loginProps,

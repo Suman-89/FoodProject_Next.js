@@ -1,6 +1,5 @@
-import { Cookies, useCookies } from "react-cookie";
 import { useGlobalHooks } from "./globalHooks";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Create, deleteProduct, GetLandingPageList, getSignleProduct, updateProduct } from "@/api/function/cms.api";
 import { CREATE, PRODUCTS, REMOVE, UPDATE } from "../query_keys/cmsQuery.keys";
