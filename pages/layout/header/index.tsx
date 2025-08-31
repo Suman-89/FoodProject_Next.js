@@ -21,6 +21,7 @@ import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { useCart } from "../../../context/cartContext";
 import { deepOrange } from "@mui/material/colors";
+import Image from "next/image";
 
 const Header: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
@@ -90,7 +91,7 @@ const Header: React.FC = () => {
             <Grid container>
               <Grid item xs={12} md={6} {...({} as any)}>
                 <Box sx={{ py: 3, display: "flex", alignItems: "center" }}>
-                  <img
+                  <Image
                     src="/assets/food/logo1.png"
                     alt="Food Recipes Logo"
                     style={{ height: "60px", marginRight: "1rem" }}
@@ -113,7 +114,7 @@ const Header: React.FC = () => {
               }}
               {...({} as any)}
             >
-              <img
+              <Image
                 src="/assets/food/header_image.png"
                 alt="Header Illustration"
                 style={{ height: "100px", marginRight: "1rem" }}
