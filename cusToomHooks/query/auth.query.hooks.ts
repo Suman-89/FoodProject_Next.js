@@ -4,7 +4,7 @@ import { useGlobalHooks } from "./globalHooks";
 import { SIGNIN, SIGNUP, VERIFY, PASSWORD } from "../query_keys/authQuery.keys";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import { loginProps } from "@/typescript/auth.interface";
+import { ILoginResponse, LoginFormValues } from "@/typescript/auth.interface";
 
 // Register
 export const useUserSignUpMutation = (): UseMutationResult<unknown> => {
@@ -32,23 +32,49 @@ export const useUserVerifyMutation = ():UseMutationResult<unknown> => {
 
 //Sign in
 
+// export const useUserSignInMutation = (): UseMutationResult<
+//   Response,       // ✅ response from server
+//   Error,          // ✅ error type (can be customized)
+//   loginProps      // ✅ variables passed to mutate
+// > => {
+//   const { queryClient } = useGlobalHooks();
+
+//   const [_, setCookie] = useCookies(["token", "id"]);
+
+//   return useMutation<response, Error, loginProps>({
+//     mutationFn: Login,
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: [SIGNIN] });
+//     },
+//   });
+// };
 export const useUserSignInMutation = (): UseMutationResult<
-  Response,       // ✅ response from server
-  Error,          // ✅ error type (can be customized)
-  loginProps      // ✅ variables passed to mutate
+  ILoginResponse,   // ✅ API response type
+  Error,            // ✅ error type
+  LoginFormValues   // ✅ variables passed to mutate()
 > => {
   const { queryClient } = useGlobalHooks();
+  const [, setCookie] = useCookies(["token", "id"]);
 
-  const [_, setCookie] = useCookies(["token", "id"]);
-
-  return useMutation<response, Error, loginProps>({
+  return useMutation<ILoginResponse, Error, LoginFormValues>({
     mutationFn: Login,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // data is strongly typed as ILoginResponse
+      const { token, user } = data;
+
+      // store cookies if needed here (or in Login.tsx)
+      setCookie("id", user.id, { path: "/" });
+      setCookie("token", token, {
+        path: "/",
+        sameSite: "lax",
+        secure: true,
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      });
+
       queryClient.invalidateQueries({ queryKey: [SIGNIN] });
     },
   });
 };
-
 //Update Password
 export const updatePasswordMutation = () =>{
   const {queryClient} = useGlobalHooks();

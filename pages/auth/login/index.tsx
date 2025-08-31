@@ -19,11 +19,15 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MuiCard from "@mui/material/Card";
+
+// Custom hooks & types
 import { useUserSignInMutation } from "@/cusToomHooks/query/auth.query.hooks";
-import { loginProps } from "@/typescript/auth.interface";
+import { LoginFormValues, ILoginResponse } from "@/typescript/auth.interface";
 
-// Your custom mutation hook
 
+// -------------------------
+// Styled Components
+// -------------------------
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -57,6 +61,10 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+
+// -------------------------
+// Validation Schema
+// -------------------------
 const validationSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
   password: yup
@@ -65,38 +73,24 @@ const validationSchema = yup.object().shape({
     .required("Password is required"),
 });
 
-type response = {
-  token:string;
-  status:boolean;
-  message:string;
-  user:{ id: string };
-}
 
+// -------------------------
+// Component
+// -------------------------
 export default function Login() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({
-    // resolver: yupResolver(validationSchema) as Resolver<loginProps>,
+  } = useForm<LoginFormValues>({
     resolver: yupResolver(validationSchema),
-
   });
-// type loginProps = yup.InferType<typeof validationSchema>;
 
   const { mutate, isPending } = useUserSignInMutation();
   const cookie = new Cookies();
   const router = useRouter();
 
-  const onSubmit = async (data: { email: string; password: string }) => {
-    // const { email, password } = data as {
-    //   email: String;
-    //   password: String;
-    // };
-    const newData = {
-      email: data.email,
-      password: data.password,
-    };
+  const onSubmit = async (data: LoginFormValues) => {
     const result = await Swal.fire({
       title: "Confirm Login?",
       icon: "warning",
@@ -107,31 +101,27 @@ export default function Login() {
     });
 
     if (result.isConfirmed) {
-      mutate(newData, {
-        onSuccess: (response : response) => {
-          const { token, status, message, user } = response || {};
-          console.log(response, "res");
-          if (status === true) {
+      mutate(data, {
+        onSuccess: (response: ILoginResponse) => {
+          const { token, status, message, user } = response;
+          if (status) {
+            // Store cookies
             cookie.set("id", user.id);
             cookie.set("token", token, {
               path: "/",
               sameSite: "lax",
               secure: true,
-              maxAge: 60 * 60 * 24 * 7,
+              maxAge: 60 * 60 * 24 * 7, // 7 days
             });
-            // path is mandatory to show the token in cookie in every page.
 
             Swal.fire("Success", message || "Login successful", "success").then(
-              () => {
-                router.push("/cms/list");
-                // window.location.reload();
-              }
+              () => router.push("/cms/list")
             );
           } else {
             Swal.fire("Error", message || "Login failed", "error");
           }
         },
-        onError: (error) => {
+        onError: (error: any) => {
           Swal.fire("Error", error?.message || "Login failed", "error");
         },
       });
@@ -194,13 +184,20 @@ export default function Login() {
 
           <Divider>or</Divider>
 
-          <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            {/* Forgot password link (optional) */}
             {/* <Typography variant="body2">
               <Link href="/auth/update" underline="hover">
                 Forgot password ?
               </Link>
             </Typography> */}
-             <Typography variant="body2">
+            <Typography variant="body2">
               Don&apos;t have an account?{" "}
               <Link href="/auth/register" underline="hover">
                 Sign up
