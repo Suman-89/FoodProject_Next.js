@@ -14,7 +14,7 @@ import { useUserVerifyMutation } from "@/cusToomHooks/query/auth.query.hooks";
 
 export default function Verify() {
   const router = useRouter();
-  const { mutate, isPending, isSuccess } = useUserVerifyMutation();
+  const { mutate } = useUserVerifyMutation();
 const userEmail = localStorage.getItem("email");
   const [otp, setOtp] = useState(new Array(4).fill(""));
   // console.log(otp,'otp')
@@ -70,8 +70,8 @@ const userEmail = localStorage.getItem("email");
         try {
           mutate(otpData);
           router.push("/auth/login");
-        } catch (error:any) {
-          Swal.fire("Please enter correct OTP,", error, "error");
+        } catch {
+          Swal.fire("Please enter correct OTP,");
         }
       }
     });
@@ -128,7 +128,7 @@ const userEmail = localStorage.getItem("email");
           </Button>
 
           <Typography variant="body2" align="center" color="text.secondary">
-            Didn't receive the code?{" "}
+            Didn't receive the code?&apos;
             <Button
               size="small"
               variant="text"

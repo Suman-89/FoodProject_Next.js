@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardContent,
-  Container,
   TextField,
   Typography,
 } from "@mui/material";
@@ -58,7 +57,7 @@ console.log(status,'status')
       reset();
       Swal.fire("Product added successfully!", "", "success");
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Something went wrong!");
     },
   });
@@ -155,7 +154,7 @@ console.log(status,'status')
                   backgroundColor: "#43a047",
                 },
               }}
-              disabled={isSubmitting}
+              disabled={isPending}
             >
               Register
             </Button>
