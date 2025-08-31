@@ -4,7 +4,7 @@ import { useGlobalHooks } from "./globalHooks";
 import { SIGNIN, SIGNUP, VERIFY, PASSWORD } from "../query_keys/authQuery.keys";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-import { ILoginResponse, LoginFormValues } from "@/typescript/auth.interface";
+import { ILoginResponse, IUpdatePasswordRequest, IUpdatePasswordResponse, LoginFormValues } from "@/typescript/auth.interface";
 
 // Register
 export const useUserSignUpMutation = (): UseMutationResult<unknown> => {
@@ -76,29 +76,50 @@ export const useUserSignInMutation = (): UseMutationResult<
   });
 };
 //Update Password
-export const updatePasswordMutation = () =>{
-  const {queryClient} = useGlobalHooks();
+// export const updatePasswordMutation = ():UseMutationResult<updatePasswordProps> =>{
+//   const {queryClient} = useGlobalHooks();
   
-    return useMutation({
-      mutationFn: PasswordUpdate,
+//     return useMutation({
+//       mutationFn: PasswordUpdate,
   
-      onSuccess: (res) => {
-        console.log("Update success:", res);
-        const { message } = res || {};
+//       onSuccess: (res) => {
+//         console.log("Update success:", res);
+//         const { message } = res || {};
   
-        toast.success(`${message || "Password updated successfully"}`);
-        queryClient.invalidateQueries({ queryKey: [PASSWORD] });
-      },
+//         toast.success(`${message || "Password updated successfully"}`);
+//         queryClient.invalidateQueries({ queryKey: [PASSWORD] });
+//       },
   
-      onError: (error: any) => {
-        toast.error(`${error?.response?.data?.msg || error?.message || "Update failed"}`);
-        console.error("Update error:", error);
-        queryClient.invalidateQueries({ queryKey: [PASSWORD] });
-      },
-    });
-}
+//       onError: (error: any) => {
+//         toast.error(`${error?.response?.data?.msg || error?.message || "Update failed"}`);
+//         console.error("Update error:", error);
+//         queryClient.invalidateQueries({ queryKey: [PASSWORD] });
+//       },
+//     });
+// }
 
 
+export const useUpdatePasswordMutation = (): UseMutationResult<
+  IUpdatePasswordResponse,   // ✅ response
+  Error,                     // ✅ error
+  IUpdatePasswordRequest     // ✅ variables
+> => {
+  const { queryClient } = useGlobalHooks();
+
+  return useMutation<IUpdatePasswordResponse, Error, IUpdatePasswordRequest>({
+    mutationFn: PasswordUpdate,
+    onSuccess: (res) => {
+      toast.success(res.message || "Password updated successfully");
+      queryClient.invalidateQueries({ queryKey: [PASSWORD] });
+    },
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.msg || error?.message || "Update failed"
+      );
+      queryClient.invalidateQueries({ queryKey: [PASSWORD] });
+    },
+  });
+};
 
 
 

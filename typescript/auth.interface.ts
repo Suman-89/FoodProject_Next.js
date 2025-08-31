@@ -37,11 +37,24 @@ export interface ILoginResponse {
 export interface IverifyProps {
   otp: string;
 }
-export interface IupdatePasswordProps {
+// export interface IupdatePasswordProps {
+//   isLoading: boolean;
+//   password: string;
+//   _id: string;
+//   message:string;
+// }
+// Request payload
+export interface IUpdatePasswordRequest {
+  user_id: string;   // ✅ consistent with your component
   password: string;
-  _id: string;
-  message:string;
 }
+
+// Response from backend
+export interface IUpdatePasswordResponse {
+  message: string;
+  status: string;    // e.g., "success" | "error"
+}
+
 
 export interface registerProps extends IregisterProps {
   user: IregisterProps;
@@ -55,6 +68,6 @@ export interface verifyProps extends IverifyProps {
   user: IverifyProps;
 }
 
-export interface updatePasswordProps extends IupdatePasswordProps {
-  user: IupdatePasswordProps;
-}
+// export interface updatePasswordProps extends IupdatePasswordProps {
+//   user: IupdatePasswordProps;
+// }

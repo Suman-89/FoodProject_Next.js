@@ -11,22 +11,20 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { updatePasswordMutation } from "@/cusToomHooks/query/auth.query.hooks";
+import { useUpdatePasswordMutation } from "@/cusToomHooks/query/auth.query.hooks";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
-
 
 type UpdatePasswordForm = {
   password: string;
 };
-
 
 type UpdatePasswordPayload = {
   user_id: string;
   password: string;
 };
 
-// Validation schema
+// ✅ Validation schema
 const schema = yup.object({
   password: yup
     .string()
@@ -37,7 +35,7 @@ const schema = yup.object({
 export default function UpdatePassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [cookies] = useCookies(["token", "id"]);
-  const { mutate, isLoading } = updatePasswordMutation();
+  const { mutate, isPending } = useUpdatePasswordMutation();
 
   const {
     register,
@@ -58,22 +56,14 @@ export default function UpdatePassword() {
       password: data.password,
     };
 
-    try {
-      mutate(payload, {
-        onSuccess: () => {
-          toast.success("Password updated successfully!");
-          // router.push("/auth/success");
-        },
-        onError: (error: any) => {
-          toast.error(
-            error?.response?.data?.message || "Failed to update password"
-          );
-        },
-      });
-    } catch (error) {
-      console.error("Password update failed:", error);
-      toast.error("Unexpected error occurred.");
-    }
+    mutate(payload, {
+      onSuccess: () => {
+        toast.success("Password updated successfully!");
+      },
+      onError: () => {
+        toast.error("Failed to update password");
+      },
+    });
   };
 
   return (
@@ -119,9 +109,9 @@ export default function UpdatePassword() {
             color="primary"
             fullWidth
             sx={{ mt: 2 }}
-            disabled={isLoading}
+            disabled={isPending} // ✅ fixed
           >
-            {isLoading ? "Loading..." : "Update Password"}
+            {isPending ? "Loading..." : "Update Password"}
           </Button>
         </Box>
       </Box>
