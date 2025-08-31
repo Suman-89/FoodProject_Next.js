@@ -96,14 +96,14 @@ const hotList: hotList[] = [
 ];
 
 const HomePage: React.FC = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [searchText, setSearchText] = React.useState("");
   const [category, setCategory] = React.useState("");
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleMenuClose = () => setAnchorEl(null);
+  // const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleMenuClose = () => setAnchorEl(null);
 
   const handleSearch = () => {
     console.log("Searching for:", searchText, "in category:", category);
@@ -227,7 +227,7 @@ const HomePage: React.FC = () => {
           What’s Hot
         </Typography>
         <Grid container spacing={2}>
-          {hotList.map((item, i) => (
+          {hotList.map((item) => (
             <Grid item xs={12} md={6} key={item.id} {...({} as any)}>
               <Card>
                 <CardMedia

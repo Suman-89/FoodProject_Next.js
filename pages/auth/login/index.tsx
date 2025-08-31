@@ -121,8 +121,8 @@ export default function Login() {
             Swal.fire("Error", message || "Login failed", "error");
           }
         },
-        onError: (error: any) => {
-          Swal.fire("Error", error?.message || "Login failed", "error");
+        onError: () => {
+          Swal.fire("Login failed", "error");
         },
       });
     }
