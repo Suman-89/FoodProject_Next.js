@@ -34,7 +34,7 @@ export default function List() {
   const [productToDelete, setProductToDelete] = React.useState<string | null>(
     null
   );
-  const [cookies, setCookie, removeCookie] = useCookies(["token", "id"]);
+  // const [cookies, setCookie, removeCookie] = useCookies(["token", "id"]);
 
   const [searchedData, setSearchedData] = React.useState("");
   const { data, isError, refetch } = listQuery();
@@ -42,6 +42,7 @@ export default function List() {
 
   const { addToCart } = useCart();
 
+  console.log(isError)
   const handleDelete = (id: string) => {
     setProductToDelete(id);
     setOpenDeleteModal(true);
@@ -70,7 +71,7 @@ export default function List() {
       field: "price",
       headerName: "Price",
       width: 120,
-      valueFormatter: (params: any) => `₹${params}`,
+      valueFormatter: (params: number) => `₹${params}`,
     },
     { field: "description", headerName: "Description", width: 250 },
     { field: "category", headerName: "Category", width: 140 },
@@ -127,12 +128,12 @@ export default function List() {
   const paginationModel = { page: 0, pageSize: 5 };
 
   const rows = (data?.data.product || [])
-    .filter((item:any) =>
+    .filter((item:{name:string, category : string, description: string}) =>
       [item.name, item.category, item.description].some((field) =>
         field?.toLowerCase().includes(searchedData.toLowerCase())
       )
     )
-    .map((item:any, index:number) => ({
+    .map((item:{_id:string}, index:number) => ({
       id: item._id,
       index: index + 1,
       ...item,
