@@ -96,14 +96,10 @@ const hotList: hotList[] = [
 ];
 
 const HomePage: React.FC = () => {
-  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [searchText, setSearchText] = React.useState("");
   const [category, setCategory] = React.useState("");
 
-  // const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-  // const handleMenuClose = () => setAnchorEl(null);
+
 
   const handleSearch = () => {
     console.log("Searching for:", searchText, "in category:", category);
@@ -112,31 +108,6 @@ const HomePage: React.FC = () => {
 
   return (
     <Box>
-      {/* Navbar */}
-      {/* <AppBar position="static" color='primary'>
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Food Recipes
-          </Typography>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={handleMenuOpen}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-            {['Home', 'Submit Recipe', 'Blog', 'About', 'Contact'].map((item) => (
-              <MenuItem key={item} onClick={handleMenuClose}>
-                {item}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Toolbar>
-      </AppBar> */}
-
       {/* Search Section */}
       <Container sx={{ my: 4 }}>
         <Typography variant="h5" gutterBottom>
