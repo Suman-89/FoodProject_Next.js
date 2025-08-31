@@ -1,6 +1,6 @@
 export interface IcreateProps {
   name: string;
-  price: string;
+  price: number;
   description: string;
   category: string;
 }

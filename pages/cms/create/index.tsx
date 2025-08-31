@@ -36,13 +36,18 @@ console.log(status,'status')
     resolver: yupResolver(schema),
     defaultValues: {
       name: "",
-      price: "",
+      price: 0,
       description: "",
       category: "",
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data :  {
+  name: string;
+  price: number;
+  description: string;
+  category: string;
+}) => {
     const formData = {
       name: data.name,
       price: data.price,
